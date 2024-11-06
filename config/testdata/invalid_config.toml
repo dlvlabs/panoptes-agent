@@ -1,0 +1,15 @@
+
+[project]
+name = ""
+rpc_url = ""
+ws_url = ""
+
+[module]
+health_check = false
+disk_space = false
+voting = false
+ibc_transfer = false
+
+[main-system]
+api_url = ""
+

@@ -1,0 +1,13 @@
+[project]
+name = "cosmos-hub"
+rpc_url = "http://localhost:11190"
+ws_url = "http://localhost:11157"
+
+[module]
+health_check = true
+disk_space = true
+voting = false
+ibc_transfer = false
+
+[main-system]
+api_url = "http:localhost:8080"

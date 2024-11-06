@@ -1,0 +1,56 @@
+###############################################################################
+#                             Node Configuration                              #
+###############################################################################
+
+[project]
+# Node name for identification
+name = ""
+
+# Node RPC endpoint - HTTP/HTTPS endpoint for node communication
+# Example: http://localhost:26657
+rpc_url = ""
+
+# Node WebSocket endpoint for subscriptions and real-time updates
+# Example: ws://localhost:26657/websocket
+ws_url = ""
+
+###############################################################################
+#                             Module Settings                                 #
+###############################################################################
+
+[module]
+# Enable/disable health check monitoring
+# This module monitors node health status including:
+# - Block production
+# - Peer connections
+# - Consensus participation
+health_check = false
+
+# Enable/disable disk space monitoring
+# Monitors disk usage and alerts when:
+# - Available space is below threshold
+# - Growth rate is abnormal
+disk_space = false
+
+# Enable/disable voting monitoring
+# Tracks validator voting participation:
+# - Missed blocks
+# - Voting power changes
+# - Proposal participation
+voting = false
+
+# Enable/disable IBC transfer monitoring
+# Monitors Inter-Blockchain Communication:
+# - Packet flow
+# - Channel status
+# - Transfer success/failure
+ibc_transfer = false
+
+###############################################################################
+#                             System Settings                                 #
+###############################################################################
+
+[main-system]
+# Main system API endpoint for reporting and control
+# Example: https://api.monitoring-system.com
+api_url = ""
