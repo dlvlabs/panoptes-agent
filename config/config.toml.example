@@ -2,29 +2,30 @@
 #                             Node Configuration                              #
 ###############################################################################
 
-[project]
+[agent]
 # Node name for identification
 name = ""
 
-# Node RPC endpoint - HTTP/HTTPS endpoint for node communication
-# Example: http://localhost:26657
-rpc_url = ""
+# Interval in minutes to send monitoring data
+# Example:
+# - 10 for every 10 minutes
+data_send_interval = 10
 
-# Node WebSocket endpoint for subscriptions and real-time updates
-# Example: ws://localhost:26657/websocket
-ws_url = ""
+# Main system API endpoint for reporting and control
+# Example: https://api.monitoring-system.com
+main_system_url = ""
 
 ###############################################################################
-#                             Module Settings                                 #
+#                             Feature Settings                                #
 ###############################################################################
 
-[module]
-# Enable/disable health check monitoring
-# This module monitors node health status including:
+[feature]
+# Enable/disable block height monitoring
+# This feature monitors block height status including:
 # - Block production
 # - Peer connections
 # - Consensus participation
-health_check = false
+block_height = false
 
 # Enable/disable disk space monitoring
 # Monitors disk usage and alerts when:
@@ -47,10 +48,30 @@ voting = false
 ibc_transfer = false
 
 ###############################################################################
-#                             System Settings                                 #
+#                           Block Height Settings                              #
 ###############################################################################
 
-[main-system]
-# Main system API endpoint for reporting and control
-# Example: https://api.monitoring-system.com
-api_url = ""
+[block-height]
+# Node RPC endpoint - HTTP/HTTPS endpoint for node communication
+# Example: http://localhost:26657
+rpc_url = ""
+
+###############################################################################
+#                           Disk Space Settings                               #
+###############################################################################
+
+[disk-space]
+# Paths of specific disk locations to monitor for usage and capacity.
+# Define the paths to be tracked for available space and growth rate.
+# Example: ["/", "/data", "/voting"]
+paths = []
+
+###############################################################################
+#                            Voting Settings                                  #
+###############################################################################
+
+[voting]
+# Node WebSocket endpoint for subscriptions and real-time updates
+# Example: ws://localhost:26657/websocket
+ws_url = ""
+

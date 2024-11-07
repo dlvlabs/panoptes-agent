@@ -14,6 +14,6 @@ func main() {
   }
 
   log.Printf("Version: %s", config.Version)
-  log.Printf("Node Name: %s", cfg.Project.Name)
-  log.Printf("Health Check Enabled: %v", cfg.Module.HealthCheck)
+  log.Printf("Node Name: %s", cfg.Agent.Name)
+  log.Printf("Disk space feature Enabled: %v", cfg.Feature.DiskSpace)
 }

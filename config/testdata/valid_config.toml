@@ -1,13 +1,25 @@
-[project]
+[agent]
 name = "cosmos-hub"
+data_send_interval = 5
+main_system_url = "http://localhost:8080"
+
+
+[feature]
+block_height = true
+disk_space = true
+voting = true
+ibc_transfer = false
+
+[block-height]
 rpc_url = "http://localhost:11190"
+
+[disk-space]
+paths = ["/"]
+
+
+[voting]
 ws_url = "http://localhost:11157"
 
-[module]
-health_check = true
-disk_space = true
-voting = false
-ibc_transfer = false
 
 [main-system]
 api_url = "http:localhost:8080"

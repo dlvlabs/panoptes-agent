@@ -1,15 +1,24 @@
-
-[project]
+[agent]
 name = ""
+data_send_interval = 10
+main_system_url = ""
+
+[feature]
+block_height = true
+disk_space = true
+voting = true
+ibc_transfer = false
+
+[block-height]
 rpc_url = ""
+
+[disk-space]
+paths = ["/"]
+
+
+[voting]
 ws_url = ""
 
-[module]
-health_check = false
-disk_space = false
-voting = false
-ibc_transfer = false
 
 [main-system]
 api_url = ""
-

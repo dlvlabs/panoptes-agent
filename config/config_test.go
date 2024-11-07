@@ -16,14 +16,12 @@ func TestLoadConfig(t *testing.T) {
     config, err := LoadConfig("testdata/valid_config.toml")
     require.NoError(t, err)
 
-    assert.Equal(t, "cosmos-hub", config.Project.Name)
-    assert.Equal(t, "http://localhost:11190", config.Project.RpcURL)
-    assert.Equal(t, "http://localhost:11157", config.Project.WsURL)
-    assert.Equal(t, true, config.Module.HealthCheck)
-    assert.Equal(t, true, config.Module.DiskSpace)
-    assert.Equal(t, false, config.Module.Voting)
-    assert.Equal(t, false, config.Module.IBCTransfer)
-    assert.Equal(t, "http:localhost:8080", config.MainSystem.ApiURL)
+    assert.Equal(t, "cosmos-hub", config.Agent.Name)
+    assert.Equal(t, true, config.Feature.BlockHeight)
+    assert.Equal(t, true, config.Feature.DiskSpace)
+    assert.Equal(t, true, config.Feature.Voting)
+    assert.Equal(t, false, config.Feature.IBCTransfer)
+    assert.Equal(t, "http://localhost:8080", config.Agent.MainSystemUrl)
   })
 
   t.Run("load invalid config", func(t *testing.T) {
@@ -39,48 +37,32 @@ func TestLoadConfig(t *testing.T) {
   })
 }
 
-func TestValidate(t *testing.T) {
+func TestValidateAgent(t *testing.T) {
   t.Run("validate config", func(t *testing.T) {
     config := &Config{
-      Project: ProjectConfig{
-        Name:   "cosmos-hub",
-        RpcURL: "http://localhost:11190",
-        WsURL:  "http://localhost:11157",
-      },
-      Module: ModuleConfig{
-        HealthCheck: true,
-        DiskSpace:   true,
-        Voting:      false,
-        IBCTransfer: false,
-      },
-      MainSystem: MainSystemConfig{
-        ApiURL: "http://localhost:8080",
+      Agent: AgentConfig{
+        Name:             "cosmos-hub",
+        MainSystemUrl:    "http://localhost:8080",
+        DataSendInterval: 5,
       },
     }
-    err := config.Validate()
+    err := config.ValidateAgent()
     require.NoError(t, err)
   })
   t.Run("invalidate config", func(t *testing.T) {
     config := &Config{
-      Project: ProjectConfig{
-        Name:   "",
-        RpcURL: "",
-        WsURL:  "",
+      Agent: AgentConfig{
+        Name: "",
       },
-      Module: ModuleConfig{
-        HealthCheck: true,
+      Feature: FeatureConfig{
+        BlockHeight: true,
         DiskSpace:   true,
-        Voting:      false,
+        Voting:      true,
         IBCTransfer: false,
       },
-      MainSystem: MainSystemConfig{
-        ApiURL: "",
-      },
     }
-    err := config.Validate()
-
+    err := config.ValidateAgent()
     require.Error(t, err)
-    assert.Contains(t, err.Error(), "project name is required")
-
+    assert.Contains(t, err.Error(), "agent name is required")
   })
 }
