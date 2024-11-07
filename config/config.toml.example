@@ -21,22 +21,16 @@ main_system_url = ""
 
 [feature]
 # Enable/disable block height monitoring
-# This feature monitors block height status including:
-# - Block production
-# - Peer connections
-# - Consensus participation
+# This feature monitors block height status
 block_height = false
 
 # Enable/disable disk space monitoring
-# Monitors disk usage and alerts when:
-# - Available space is below threshold
-# - Growth rate is abnormal
+# Monitors disk usage and alerts 
 disk_space = false
 
 # Enable/disable voting monitoring
 # Tracks validator voting participation:
 # - Missed blocks
-# - Voting power changes
 # - Proposal participation
 voting = false
 
