@@ -102,6 +102,5 @@ func LoadConfig(path string) (*Config, error) {
       return nil, fmt.Errorf("invalid config: %w", err)
     }
   }
-  fmt.Println(config.DiskSpaceConfig.Paths)
   return config, nil
 }
