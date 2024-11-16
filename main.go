@@ -1,25 +1,28 @@
 package main
 
 import (
-  "context"
   "log"
+  "os"
+  "os/signal"
+  "syscall"
 
   "dlvlabs.net/panoptes-agent/config"
-  rpc "dlvlabs.net/panoptes-agent/infrastructure/rpc"
-  blockheight "dlvlabs.net/panoptes-agent/internal/blockheight"
+  "dlvlabs.net/panoptes-agent/internal/agent"
 )
 
 func main() {
   cfg, err := config.LoadConfig("config/config.toml")
-  ctx := context.Background()
   if err != nil {
     log.Fatalf("Failed to load config: %v", err)
   }
-  if cfg.Feature.BlockHeight {
-    c, err := rpc.NewClient(&ctx, cfg.BlockHeightConfig.RpcURL)
-    if err != nil {
-      log.Fatalf("Failed to create rpc client: %v", err)
-    }
-    blockheight.GetBlockHeight(c, ctx)
+
+  monitor := agent.NewAgent(cfg)
+  if err := monitor.Start(); err != nil {
+    log.Fatalf("Failed to start monitoring: %v", err)
   }
+  defer monitor.Stop()
+
+  sigCh := make(chan os.Signal, 1)
+  signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
+  <-sigCh
 }
