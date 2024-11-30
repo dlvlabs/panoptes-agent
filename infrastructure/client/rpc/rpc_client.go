@@ -27,7 +27,6 @@ func (c *RPCClient) Close() error {
   return nil
 }
 
-// GetClient returns the underlying HTTP client
 func (c *RPCClient) GetClient() *http.HTTP {
   return c.client
 }

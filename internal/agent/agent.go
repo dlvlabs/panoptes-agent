@@ -7,7 +7,7 @@ import (
   "dlvlabs.net/panoptes-agent/config"
   "dlvlabs.net/panoptes-agent/infrastructure/client/rpc"
   "dlvlabs.net/panoptes-agent/internal/block"
-  "dlvlabs.net/panoptes-agent/utils"
+  "dlvlabs.net/panoptes-agent/utils/schedule"
 )
 
 type Agent struct {
@@ -28,7 +28,7 @@ func NewAgent(cfg *config.Config) *Agent {
 }
 
 func (m *Agent) Start() error {
-  schedule := utils.MonitorSchedule(m.ctx, m.minutes)
+  schedule := schedule.MonitorSchedule(m.ctx, m.minutes)
 
   if m.cfg.Feature.BlockHeight {
     rpcClient, err := rpc.NewRPCClient(&m.ctx, m.cfg.BlockHeightConfig.RpcURL)
