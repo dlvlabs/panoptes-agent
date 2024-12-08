@@ -43,6 +43,10 @@ func (m *Agent) Start() error {
     log.Println("Block height monitoring started")
   }
 
+  if m.cfg.Feature.DiskSpace {
+    log.Println("Disk space monitoring started")
+  }
+
   return nil
 }
 

@@ -10,8 +10,7 @@ func MonitorSchedule(ctx context.Context, minutes int) <-chan time.Time {
     return nil
   }
 
-  interval := time.Duration(minutes) * time.Millisecond
-  ticker := time.NewTicker(interval)
+  ticker := time.NewTicker(time.Duration(minutes) * time.Minute)
   ch := make(chan time.Time)
 
   go func() {
