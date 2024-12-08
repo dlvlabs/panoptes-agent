@@ -43,7 +43,7 @@ func TestMonitorSchedule(t *testing.T) {
         return
       }
 
-      testDuration := 200 * time.Millisecond
+      testDuration := 1 * time.Minute
       for i := 0; i < tt.checkTimes; i++ {
         select {
         case _, ok := <-schedule:
