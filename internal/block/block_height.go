@@ -23,5 +23,5 @@ func GetBlockHeight(c *http.HTTP, ctx context.Context) error {
 }
 
 func printABCIInfo(info *coretypes.ResultABCIInfo) {
-  fmt.Printf("LastBlockHeight: %d\n", info.Response.LastBlockHeight)
+  log.Printf("LastBlockHeight: %d\n", info.Response.LastBlockHeight)
 }

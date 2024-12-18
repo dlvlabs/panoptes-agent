@@ -11,7 +11,7 @@ func MonitorSchedule(ctx context.Context, minutes int) <-chan time.Time {
   }
 
   ticker := time.NewTicker(time.Duration(minutes) * time.Minute)
-  ch := make(chan time.Time)
+  ch := make(chan time.Time, 1)
 
   go func() {
     defer ticker.Stop()
@@ -38,4 +38,8 @@ func MonitorSchedule(ctx context.Context, minutes int) <-chan time.Time {
   }()
 
   return ch
+}
+
+func NewMonitorSchedule(ctx context.Context, minutes int) <-chan time.Time {
+  return MonitorSchedule(ctx, minutes)
 }
