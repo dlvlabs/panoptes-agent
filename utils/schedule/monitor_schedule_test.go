@@ -35,7 +35,7 @@ func TestMonitorSchedule(t *testing.T) {
         testMinutes = tt.minutes
       }
 
-      schedule := MonitorSchedule(ctx, testMinutes)
+      schedule := monitorSchedule(ctx, testMinutes)
       if tt.expectError {
         if schedule != nil {
           t.Error("expected nil schedule for invalid interval")
@@ -75,7 +75,7 @@ func TestMonitorScheduleConcurrency(t *testing.T) {
   ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
   defer cancel()
 
-  schedule := MonitorSchedule(ctx, 1)
+  schedule := monitorSchedule(ctx, 1)
 
   const goroutines = 5
   var wg sync.WaitGroup

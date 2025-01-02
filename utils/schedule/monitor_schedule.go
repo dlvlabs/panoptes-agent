@@ -5,7 +5,7 @@ import (
   "time"
 )
 
-func MonitorSchedule(ctx context.Context, minutes int) <-chan time.Time {
+func monitorSchedule(ctx context.Context, minutes int) <-chan time.Time {
   if minutes <= 0 {
     return nil
   }
@@ -41,5 +41,5 @@ func MonitorSchedule(ctx context.Context, minutes int) <-chan time.Time {
 }
 
 func NewMonitorSchedule(ctx context.Context, minutes int) <-chan time.Time {
-  return MonitorSchedule(ctx, minutes)
+  return monitorSchedule(ctx, minutes)
 }

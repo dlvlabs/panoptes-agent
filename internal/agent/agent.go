@@ -11,13 +11,6 @@ import (
   "dlvlabs.net/panoptes-agent/utils/schedule"
 )
 
-type Agent struct {
-  cfg     *config.Config
-  ctx     context.Context
-  cancel  context.CancelFunc
-  minutes int
-}
-
 func NewAgent(cfg *config.Config) *Agent {
   ctx, cancel := context.WithCancel(context.Background())
   return &Agent{
@@ -28,25 +21,27 @@ func NewAgent(cfg *config.Config) *Agent {
   }
 }
 
-func (m *Agent) Start() error {
-  if m.cfg.Feature.BlockHeight {
-    blockSchedule := schedule.NewMonitorSchedule(m.ctx, m.minutes)
-    rpcClient, err := rpc.NewRPCClient(&m.ctx, m.cfg.BlockHeightConfig.RpcURL)
+func (a *Agent) Start() error {
+  if a.cfg.Feature.BlockHeight {
+    blockSchedule := schedule.NewMonitorSchedule(a.ctx, a.minutes)
+    rpcClient, err := rpc.NewRPCClient(&a.ctx, a.cfg.BlockHeightConfig.RpcURL)
     if err != nil {
       return err
     }
 
-    blockMonitor := block.NewBlockMonitor(rpcClient)
-    if err := blockMonitor.Start(m.ctx, blockSchedule); err != nil {
+    // 포인터에 할당
+    a.blockMonitor = block.NewBlockMonitor(rpcClient)
+    if err := a.blockMonitor.Start(a.ctx, blockSchedule); err != nil {
       return err
     }
     log.Println("Block height monitoring started")
   }
 
-  if m.cfg.Feature.DiskSpace {
-    diskSchedule := schedule.NewMonitorSchedule(m.ctx, m.minutes)
-    diskMonitor := disk.NewDiskMonitor(m.cfg.DiskSpaceConfig.Paths)
-    if err := diskMonitor.Start(m.ctx, diskSchedule); err != nil {
+  if a.cfg.Feature.DiskSpace {
+    diskSchedule := schedule.NewMonitorSchedule(a.ctx, a.minutes)
+    // 포인터에 할당
+    a.diskMonitor = disk.NewDiskMonitor(a.cfg.DiskSpaceConfig.Paths)
+    if err := a.diskMonitor.Start(a.ctx, diskSchedule); err != nil {
       return err
     }
     log.Println("Disk space monitoring started")
@@ -55,6 +50,13 @@ func (m *Agent) Start() error {
   return nil
 }
 
-func (m *Agent) Stop() {
-  m.cancel()
+func (a *Agent) Stop() {
+  if a.blockMonitor != nil {
+    a.blockMonitor.Stop()
+  }
+
+  if a.diskMonitor != nil {
+    a.diskMonitor.Stop()
+  }
+  a.cancel()
 }

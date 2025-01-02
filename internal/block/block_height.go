@@ -9,7 +9,7 @@ import (
   coretypes "github.com/cometbft/cometbft/rpc/core/types"
 )
 
-func GetBlockHeight(c *http.HTTP, ctx context.Context) error {
+func getBlockHeight(c *http.HTTP, ctx context.Context) error {
   abciInfo, err := c.ABCIInfo(ctx)
   if err != nil {
     return fmt.Errorf("failed to get ABCI info: %v", err)
