@@ -8,11 +8,6 @@ import (
   "dlvlabs.net/panoptes-agent/infrastructure/client/rpc"
 )
 
-type BlockMonitor struct {
-  client *rpc.RPCClient
-  done   chan struct{}
-}
-
 func NewBlockMonitor(client *rpc.RPCClient) *BlockMonitor {
   return &BlockMonitor{
     client: client,
@@ -30,7 +25,7 @@ func (m *BlockMonitor) Start(ctx context.Context, schedule <-chan time.Time) err
       case <-m.done:
         return
       case <-schedule:
-        if err := GetBlockHeight(m.client.GetClient(), ctx); err != nil {
+        if err := getBlockHeight(m.client.GetClient(), ctx); err != nil {
           log.Printf("Error getting block height: %v", err)
         }
       }
