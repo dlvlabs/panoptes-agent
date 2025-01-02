@@ -15,6 +15,10 @@ data_send_interval = 10
 # Example: https://api.monitoring-system.com
 main_system_url = ""
 
+# Node RPC endpoint - HTTP/HTTPS endpoint for node communication
+# Example: http://localhost:26657
+rpc_url = ""
+
 ###############################################################################
 #                             Feature Settings                                #
 ###############################################################################
@@ -46,9 +50,7 @@ ibc_transfer = false
 ###############################################################################
 
 [block-height]
-# Node RPC endpoint - HTTP/HTTPS endpoint for node communication
-# Example: http://localhost:26657
-rpc_url = ""
+
 
 ###############################################################################
 #                           Disk Space Settings                               #
@@ -61,11 +63,9 @@ rpc_url = ""
 paths = []
 
 ###############################################################################
-#                            Voting Settings                                  #
+#                              Vote Settings                                  #
 ###############################################################################
 
-[voting]
-# Node WebSocket endpoint for subscriptions and real-time updates
-# Example: ws://localhost:26657/websocket
-ws_url = ""
+[vote]
+
 

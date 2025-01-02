@@ -24,7 +24,7 @@ func NewAgent(cfg *config.Config) *Agent {
 func (a *Agent) Start() error {
   if a.cfg.Feature.BlockHeight {
     blockSchedule := schedule.NewMonitorSchedule(a.ctx, a.minutes)
-    rpcClient, err := rpc.NewRPCClient(&a.ctx, a.cfg.BlockHeightConfig.RpcURL)
+    rpcClient, err := rpc.NewRPCClient(&a.ctx, a.cfg.Agent.RpcURL)
     if err != nil {
       return err
     }

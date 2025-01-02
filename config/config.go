@@ -13,30 +13,29 @@ type Config struct {
   Feature           FeatureConfig     `toml:"feature"`
   BlockHeightConfig BlockHeightConfig `toml:"block-height"`
   DiskSpaceConfig   DiskSpaceConfig   `toml:"disk-space"`
-  VotingConfig      VotingConfig      `toml:"voting"`
+  VoteConfig        VoteConfig        `toml:"vote"`
 }
 
 type AgentConfig struct {
   Name             string `toml:"name"`
   DataSendInterval int    `toml:"data_send_interval"`
   MainSystemUrl    string `toml:"main_system_url"`
+  RpcURL           string `toml:"rpc_url"`
 }
 
 type BlockHeightConfig struct {
-  RpcURL string `toml:"rpc_url"`
 }
 
 type DiskSpaceConfig struct {
   Paths []string `toml:"paths"`
 }
-type VotingConfig struct {
-  WsURL string `toml:"ws_url"`
+type VoteConfig struct {
 }
 
 type FeatureConfig struct {
   BlockHeight bool `toml:"block_height"`
   DiskSpace   bool `toml:"disk_space"`
-  Voting      bool `toml:"voting"`
+  Vote        bool `toml:"vote"`
   IBCTransfer bool `toml:"ibc_transfer"`
 }
 
@@ -54,9 +53,7 @@ func (c *Config) ValidateAgent() error {
 }
 
 func (c *Config) ValidateBlockHeightFeature() error {
-  if c.BlockHeightConfig.RpcURL == "" {
-    return fmt.Errorf("to use the block-height feature, rpc-url is required")
-  }
+
   return nil
 }
 func (c *Config) ValidateDiskSpaceFeature() error {
@@ -67,9 +64,7 @@ func (c *Config) ValidateDiskSpaceFeature() error {
   return nil
 }
 func (c *Config) ValidateVotingFeature() error {
-  if c.VotingConfig.WsURL == "" {
-    return fmt.Errorf("to use the voting feature, ws-url is required")
-  }
+
   return nil
 }
 
@@ -97,7 +92,7 @@ func LoadConfig(path string) (*Config, error) {
       return nil, fmt.Errorf("invalid config: %w", err)
     }
   }
-  if config.Feature.Voting {
+  if config.Feature.Vote {
     if err := config.ValidateVotingFeature(); err != nil {
       return nil, fmt.Errorf("invalid config: %w", err)
     }
