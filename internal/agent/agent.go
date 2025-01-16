@@ -47,14 +47,14 @@ func (a *Agent) Start() error {
     log.Println("Disk space monitoring started")
   }
 
-  if a.cfg.Feature.Vote {
+  if a.cfg.Feature.ValidatorMassage {
     voteSchedule := schedule.NewMonitorSchedule(a.ctx, a.minutes)
     rpcClient, err := rpc.NewRPCClient(&a.ctx, a.cfg.Agent.RpcURL)
     if err != nil {
       return err
     }
     a.voteMonitor = vote.NewVoteMonitor(rpcClient)
-    if err := a.voteMonitor.Start(a.ctx, voteSchedule, a.cfg.VoteConfig.ConsAddress); err != nil {
+    if err := a.voteMonitor.Start(a.ctx, voteSchedule, a.cfg.ValidatorMassageConfig.ConsAddress); err != nil {
       return err
     }
     log.Println("Vote monitoring started")

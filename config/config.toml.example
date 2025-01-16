@@ -32,11 +32,12 @@ block_height = false
 # Monitors disk usage and alerts 
 disk_space = false
 
-# Enable/disable voting monitoring
-# Tracks validator voting participation:
+# Enable/disable validator message monitoring
+# Tracks validator participation:
 # - Missed blocks
-# - Proposal participation
-vote = false
+# - Status
+# - Moniker
+validator_massage = false
 
 # Enable/disable IBC transfer monitoring
 # Monitors Inter-Blockchain Communication:
@@ -63,9 +64,9 @@ ibc_transfer = false
 paths = []
 
 ###############################################################################
-#                              Vote Settings                                  #
+#                         Validator Massage Settings                          #
 ###############################################################################
 
-[vote]
+[validator-massage]
 
 cons_address = ""

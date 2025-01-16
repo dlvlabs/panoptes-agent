@@ -19,7 +19,7 @@ func TestLoadConfig(t *testing.T) {
     assert.Equal(t, "cosmos-hub", config.Agent.Name)
     assert.Equal(t, true, config.Feature.BlockHeight)
     assert.Equal(t, true, config.Feature.DiskSpace)
-    assert.Equal(t, true, config.Feature.Vote)
+    assert.Equal(t, true, config.Feature.ValidatorMassage)
     assert.Equal(t, false, config.Feature.IBCTransfer)
     assert.Equal(t, "http://localhost:8080", config.Agent.MainSystemUrl)
   })
@@ -55,10 +55,10 @@ func TestValidateAgent(t *testing.T) {
         Name: "",
       },
       Feature: FeatureConfig{
-        BlockHeight: true,
-        DiskSpace:   true,
-        Vote:        true,
-        IBCTransfer: false,
+        BlockHeight:      true,
+        DiskSpace:        true,
+        ValidatorMassage: true,
+        IBCTransfer:      false,
       },
     }
     err := config.ValidateAgent()

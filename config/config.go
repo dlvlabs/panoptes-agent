@@ -9,11 +9,11 @@ import (
 const Version = "0.0.1"
 
 type Config struct {
-  Agent             AgentConfig       `toml:"agent"`
-  Feature           FeatureConfig     `toml:"feature"`
-  BlockHeightConfig BlockHeightConfig `toml:"block-height"`
-  DiskSpaceConfig   DiskSpaceConfig   `toml:"disk-space"`
-  VoteConfig        VoteConfig        `toml:"vote"`
+  Agent                  AgentConfig            `toml:"agent"`
+  Feature                FeatureConfig          `toml:"feature"`
+  BlockHeightConfig      BlockHeightConfig      `toml:"block-height"`
+  DiskSpaceConfig        DiskSpaceConfig        `toml:"disk-space"`
+  ValidatorMassageConfig ValidatorMassageConfig `toml:"validator-massage"`
 }
 
 type AgentConfig struct {
@@ -29,16 +29,17 @@ type BlockHeightConfig struct {
 type DiskSpaceConfig struct {
   Paths []string `toml:"paths"`
 }
-type VoteConfig struct {
+
+type ValidatorMassageConfig struct {
   // TODO: 삭제 후 일반 Address -> consAddress로 변환하는 기능 추가
   ConsAddress string `toml:"cons_address"`
 }
 
 type FeatureConfig struct {
-  BlockHeight bool `toml:"block_height"`
-  DiskSpace   bool `toml:"disk_space"`
-  Vote        bool `toml:"vote"`
-  IBCTransfer bool `toml:"ibc_transfer"`
+  BlockHeight      bool `toml:"block_height"`
+  DiskSpace        bool `toml:"disk_space"`
+  ValidatorMassage bool `toml:"validator_massage"`
+  IBCTransfer      bool `toml:"ibc_transfer"`
 }
 
 func (c *Config) ValidateAgent() error {
@@ -59,14 +60,16 @@ func (c *Config) ValidateBlockHeightFeature() error {
   return nil
 }
 func (c *Config) ValidateDiskSpaceFeature() error {
-  fmt.Println(c.DiskSpaceConfig.Paths)
   if len(c.DiskSpaceConfig.Paths) == 0 {
     return fmt.Errorf("to use the disk space feature, paths is required")
   }
   return nil
 }
-func (c *Config) ValidateVotingFeature() error {
+func (c *Config) ValidateValidatorMassageFeature() error {
 
+  if c.ValidatorMassageConfig.ConsAddress == "" {
+    return fmt.Errorf("to use the validator massage feature, cons_address is required")
+  }
   return nil
 }
 
@@ -94,8 +97,8 @@ func LoadConfig(path string) (*Config, error) {
       return nil, fmt.Errorf("invalid config: %w", err)
     }
   }
-  if config.Feature.Vote {
-    if err := config.ValidateVotingFeature(); err != nil {
+  if config.Feature.ValidatorMassage {
+    if err := config.ValidateValidatorMassageFeature(); err != nil {
       return nil, fmt.Errorf("invalid config: %w", err)
     }
   }

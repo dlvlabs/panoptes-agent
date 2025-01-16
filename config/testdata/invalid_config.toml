@@ -7,7 +7,7 @@ rpc_url = ""
 [feature]
 block_height = true
 disk_space = true
-vote = true
+validator_massage = true
 ibc_transfer = false
 
 [block-height]
@@ -17,7 +17,8 @@ ibc_transfer = false
 paths = ["/"]
 
 
-[vote]
+[validator-massage]
+cons_address = ""
 
 
 [main-system]
