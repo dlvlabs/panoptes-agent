@@ -36,7 +36,7 @@ disk_space = false
 # Tracks validator voting participation:
 # - Missed blocks
 # - Proposal participation
-voting = false
+vote = false
 
 # Enable/disable IBC transfer monitoring
 # Monitors Inter-Blockchain Communication:
@@ -68,4 +68,4 @@ paths = []
 
 [vote]
 
-
+cons_address = ""

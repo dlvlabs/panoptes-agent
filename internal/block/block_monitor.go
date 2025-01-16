@@ -20,14 +20,15 @@ func (m *BlockMonitor) Start(ctx context.Context, schedule <-chan time.Time) err
   go func() {
     for {
       select {
-      case <-ctx.Done():
-        return
-      case <-m.done:
-        return
       case <-schedule:
         if err := getBlockHeight(m.client.GetClient(), ctx); err != nil {
           log.Printf("Error getting block height: %v", err)
         }
+      case <-ctx.Done():
+        return
+      case <-m.done:
+        return
+
       }
     }
   }()

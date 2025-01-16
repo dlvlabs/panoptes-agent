@@ -8,6 +8,7 @@ import (
   "dlvlabs.net/panoptes-agent/infrastructure/client/rpc"
   "dlvlabs.net/panoptes-agent/internal/block"
   "dlvlabs.net/panoptes-agent/internal/disk"
+  "dlvlabs.net/panoptes-agent/internal/vote"
   "dlvlabs.net/panoptes-agent/utils/schedule"
 )
 
@@ -29,7 +30,6 @@ func (a *Agent) Start() error {
       return err
     }
 
-    // 포인터에 할당
     a.blockMonitor = block.NewBlockMonitor(rpcClient)
     if err := a.blockMonitor.Start(a.ctx, blockSchedule); err != nil {
       return err
@@ -45,6 +45,19 @@ func (a *Agent) Start() error {
       return err
     }
     log.Println("Disk space monitoring started")
+  }
+
+  if a.cfg.Feature.Vote {
+    voteSchedule := schedule.NewMonitorSchedule(a.ctx, a.minutes)
+    rpcClient, err := rpc.NewRPCClient(&a.ctx, a.cfg.Agent.RpcURL)
+    if err != nil {
+      return err
+    }
+    a.voteMonitor = vote.NewVoteMonitor(rpcClient)
+    if err := a.voteMonitor.Start(a.ctx, voteSchedule, a.cfg.VoteConfig.ConsAddress); err != nil {
+      return err
+    }
+    log.Println("Vote monitoring started")
   }
 
   return nil

@@ -30,6 +30,8 @@ type DiskSpaceConfig struct {
   Paths []string `toml:"paths"`
 }
 type VoteConfig struct {
+  // TODO: 삭제 후 일반 Address -> consAddress로 변환하는 기능 추가
+  ConsAddress string `toml:"cons_address"`
 }
 
 type FeatureConfig struct {
