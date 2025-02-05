@@ -8,7 +8,7 @@ import (
   "dlvlabs.net/panoptes-agent/infrastructure/client/rpc"
   "dlvlabs.net/panoptes-agent/internal/block"
   "dlvlabs.net/panoptes-agent/internal/disk"
-  "dlvlabs.net/panoptes-agent/internal/vote"
+  "dlvlabs.net/panoptes-agent/internal/validator"
   "dlvlabs.net/panoptes-agent/utils/schedule"
 )
 
@@ -34,12 +34,12 @@ func (a *Agent) Start() error {
     if err := a.blockMonitor.Start(a.ctx, blockSchedule); err != nil {
       return err
     }
+
     log.Println("Block height monitoring started")
   }
 
   if a.cfg.Feature.DiskSpace {
     diskSchedule := schedule.NewMonitorSchedule(a.ctx, a.minutes)
-    // 포인터에 할당
     a.diskMonitor = disk.NewDiskMonitor(a.cfg.DiskSpaceConfig.Paths)
     if err := a.diskMonitor.Start(a.ctx, diskSchedule); err != nil {
       return err
@@ -53,11 +53,11 @@ func (a *Agent) Start() error {
     if err != nil {
       return err
     }
-    a.voteMonitor = vote.NewVoteMonitor(rpcClient)
-    if err := a.voteMonitor.Start(a.ctx, voteSchedule, a.cfg.ValidatorMassageConfig.ConsAddress); err != nil {
+    a.validator = validator.NewValidatorMonitor(rpcClient, a.cfg.ValidatorMassageConfig.AccAddress)
+    if err := a.validator.Start(a.ctx, voteSchedule, a.cfg.ValidatorMassageConfig.AccAddress); err != nil {
       return err
     }
-    log.Println("Vote monitoring started")
+    log.Println("Validator monitoring started")
   }
 
   return nil

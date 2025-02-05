@@ -32,7 +32,7 @@ type DiskSpaceConfig struct {
 
 type ValidatorMassageConfig struct {
   // TODO: 삭제 후 일반 Address -> consAddress로 변환하는 기능 추가
-  ConsAddress string `toml:"cons_address"`
+  AccAddress string `toml:"acc_address"`
 }
 
 type FeatureConfig struct {
@@ -67,8 +67,8 @@ func (c *Config) ValidateDiskSpaceFeature() error {
 }
 func (c *Config) ValidateValidatorMassageFeature() error {
 
-  if c.ValidatorMassageConfig.ConsAddress == "" {
-    return fmt.Errorf("to use the validator massage feature, cons_address is required")
+  if c.ValidatorMassageConfig.AccAddress == "" {
+    return fmt.Errorf("to use the validator massage feature, acc_address is required")
   }
   return nil
 }

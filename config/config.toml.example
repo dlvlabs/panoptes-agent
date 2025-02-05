@@ -69,4 +69,4 @@ paths = []
 
 [validator-massage]
 
-cons_address = ""
+acc_address = ""

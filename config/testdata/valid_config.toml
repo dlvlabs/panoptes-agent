@@ -18,7 +18,7 @@ paths = ["/"]
 
 
 [validator-massage]
-cons_address = "cosmosvalcons..."
+acc_address = "cosmosvalcons..."
 
 
 [main-system]

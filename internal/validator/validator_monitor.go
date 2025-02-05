@@ -1,4 +1,4 @@
-package vote
+package validator
 
 import (
   "context"
@@ -7,17 +7,31 @@ import (
   "time"
 
   "dlvlabs.net/panoptes-agent/infrastructure/client/rpc"
+  "dlvlabs.net/panoptes-agent/utils/convert"
   "github.com/cometbft/cometbft/rpc/client/http"
   slashingTypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 )
 
-func NewVoteMonitor(client *rpc.RPCClient) *VoteMonitor {
-  return &VoteMonitor{
-    client: client,
-    done:   make(chan struct{}),
+func NewValidatorMonitor(client *rpc.RPCClient, accAddress string) *ValidatorMonitor {
+  consAddress, err := convert.ConvertToConsAddress(client.GetClient(), context.Background(), accAddress)
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  valAddress, err := convert.ConvertToValoperAddress(accAddress)
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  return &ValidatorMonitor{
+    accAddress:               accAddress,
+    validatorOperatorAddress: valAddress,
+    consAddress:              consAddress,
+    client:                   client,
+    done:                     make(chan struct{}),
   }
 }
-func getVoteStatus(c *http.HTTP, ctx context.Context, consAddress string) error {
+func getValidatorStatus(c *http.HTTP, ctx context.Context, consAddress string) error {
   req := slashingTypes.QuerySigningInfoRequest{
     ConsAddress: consAddress,
   }
@@ -36,18 +50,19 @@ func getVoteStatus(c *http.HTTP, ctx context.Context, consAddress string) error 
     return fmt.Errorf("failed to unmarshal response: %w", err)
   }
   fmt.Println(response.ValSigningInfo.MissedBlocksCounter)
+
   return nil
 }
 
-func (v *VoteMonitor) Start(ctx context.Context, schedule <-chan time.Time, consAddress string) error {
+func (v *ValidatorMonitor) Start(ctx context.Context, schedule <-chan time.Time, accAddress string) error {
   go func() {
     for {
       select {
       case <-schedule:
-        if err := getVoteStatus(v.client.GetClient(), ctx, consAddress); err != nil {
+        if err := getValidatorStatus(v.client.GetClient(), ctx, accAddress); err != nil {
           log.Printf("Error getting vote status: %v", err)
         }
-        log.Println("Vote monitoring started")
+        log.Println("Validator monitoring started")
       case <-ctx.Done():
         return
       case <-v.done:
@@ -58,6 +73,6 @@ func (v *VoteMonitor) Start(ctx context.Context, schedule <-chan time.Time, cons
   return nil
 }
 
-func (v *VoteMonitor) Stop() {
+func (v *ValidatorMonitor) Stop() {
   close(v.done)
 }
