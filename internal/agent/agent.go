@@ -48,13 +48,13 @@ func (a *Agent) Start() error {
   }
 
   if a.cfg.Feature.ValidatorMassage {
-    voteSchedule := schedule.NewMonitorSchedule(a.ctx, a.minutes)
+    validatorSchedule := schedule.NewMonitorSchedule(a.ctx, a.minutes)
     rpcClient, err := rpc.NewRPCClient(&a.ctx, a.cfg.Agent.RpcURL)
     if err != nil {
       return err
     }
     a.validator = validator.NewValidatorMonitor(rpcClient, a.cfg.ValidatorMassageConfig.AccAddress)
-    if err := a.validator.Start(a.ctx, voteSchedule, a.cfg.ValidatorMassageConfig.AccAddress); err != nil {
+    if err := a.validator.Start(a.ctx, validatorSchedule); err != nil {
       return err
     }
     log.Println("Validator monitoring started")

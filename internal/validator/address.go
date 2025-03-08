@@ -1,4 +1,4 @@
-package convert
+package validator
 
 import (
   "context"
@@ -6,6 +6,7 @@ import (
   "encoding/base64"
   "encoding/json"
   "fmt"
+  "strings"
 
   "github.com/cometbft/cometbft/rpc/client/http"
   sdk "github.com/cosmos/cosmos-sdk/types"
@@ -22,15 +23,12 @@ func ConvertToConsAddress(c *http.HTTP, ctx context.Context, address string) (st
   req := stakingTypes.QueryValidatorRequest{
     ValidatorAddr: valAddr,
   }
-  // fmt.Printf("Querying validator with address: %s\n", req.ValidatorAddr)
 
   data, err := req.Marshal()
   if err != nil {
     return "", fmt.Errorf("failed to marshal request: %w", err)
   }
-  // fmt.Printf("Request data (hex): %x\n", data)
 
-  // fmt.Printf("Sending ABCI query to: %s\n", "/cosmos.staking.v1beta1.Query/Validator")
   result, err := c.ABCIQuery(ctx, "/cosmos.staking.v1beta1.Query/Validator", data)
   if err != nil {
     return "", fmt.Errorf("failed to query validator: %w", err)
@@ -50,7 +48,6 @@ func ConvertToConsAddress(c *http.HTTP, ctx context.Context, address string) (st
   }
 
   pubkeyBase64 := base64.StdEncoding.EncodeToString(response.Validator.ConsensusPubkey.Value[2:])
-  fmt.Printf("Pubkey key value: %s\n", pubkeyBase64)
   pubKeyBytes, err := base64.StdEncoding.DecodeString(pubkeyBase64)
   if err != nil {
     panic(fmt.Errorf("failed to decode Base64 key: %w", err))
@@ -64,7 +61,6 @@ func ConvertToConsAddress(c *http.HTTP, ctx context.Context, address string) (st
     panic(fmt.Errorf("failed to convert to Bech32: %w", err))
   }
 
-  fmt.Printf("Validator consensus address: %s\n", valConsAddress)
   return valConsAddress, nil
 }
 
@@ -85,13 +81,39 @@ func ConvertPubKeyToConsAddress(pubkeyJSON string) (string, error) {
   }
 
   consAddr := sdk.ConsAddress(keyBytes)
-  // fmt.Printf("Generated consensus address bytes: %x\n", consAddr.Bytes())
 
   bech32ConsAddr, err := sdk.Bech32ifyAddressBytes("cosmosvalcons", consAddr)
   if err != nil {
     return "", fmt.Errorf("failed to convert to consensus address: %w", err)
   }
-  // fmt.Printf("Final bech32 consensus address: %s\n", bech32ConsAddr)
 
   return bech32ConsAddr, nil
+}
+
+func ConvertToValoperAddress(address string) (string, error) {
+  prefix := GetPrefix(address) + "valoper"
+
+  accAddr, err := sdk.AccAddressFromBech32(address)
+  if err != nil {
+    return "", fmt.Errorf("invalid address: %v", err)
+  }
+
+  valAddr := sdk.ValAddress(accAddr)
+  bech32ValAddr, err := sdk.Bech32ifyAddressBytes(prefix, valAddr)
+  if err != nil {
+    return "", fmt.Errorf("failed to convert to valoper address: %v", err)
+  }
+
+  return bech32ValAddr, nil
+}
+
+func GetPrefix(address string) string {
+  if address == "" {
+    return ""
+  }
+  parts := strings.Split(address, "1")
+  if len(parts) < 2 {
+    return ""
+  }
+  return parts[0]
 }
