@@ -9,35 +9,37 @@ import (
 const Version = "0.0.1"
 
 type Config struct {
-  Agent             AgentConfig       `toml:"agent"`
-  Feature           FeatureConfig     `toml:"feature"`
-  BlockHeightConfig BlockHeightConfig `toml:"block-height"`
-  DiskSpaceConfig   DiskSpaceConfig   `toml:"disk-space"`
-  VotingConfig      VotingConfig      `toml:"voting"`
+  Agent                  AgentConfig            `toml:"agent"`
+  Feature                FeatureConfig          `toml:"feature"`
+  BlockHeightConfig      BlockHeightConfig      `toml:"block-height"`
+  DiskSpaceConfig        DiskSpaceConfig        `toml:"disk-space"`
+  ValidatorMassageConfig ValidatorMassageConfig `toml:"validator-massage"`
 }
 
 type AgentConfig struct {
   Name             string `toml:"name"`
   DataSendInterval int    `toml:"data_send_interval"`
   MainSystemUrl    string `toml:"main_system_url"`
+  RpcURL           string `toml:"rpc_url"`
 }
 
 type BlockHeightConfig struct {
-  RpcURL string `toml:"rpc_url"`
 }
 
 type DiskSpaceConfig struct {
   Paths []string `toml:"paths"`
 }
-type VotingConfig struct {
-  WsURL string `toml:"ws_url"`
+
+type ValidatorMassageConfig struct {
+  // TODO: 삭제 후 일반 Address -> consAddress로 변환하는 기능 추가
+  AccAddress string `toml:"acc_address"`
 }
 
 type FeatureConfig struct {
-  BlockHeight bool `toml:"block_height"`
-  DiskSpace   bool `toml:"disk_space"`
-  Voting      bool `toml:"voting"`
-  IBCTransfer bool `toml:"ibc_transfer"`
+  BlockHeight      bool `toml:"block_height"`
+  DiskSpace        bool `toml:"disk_space"`
+  ValidatorMassage bool `toml:"validator_massage"`
+  IBCTransfer      bool `toml:"ibc_transfer"`
 }
 
 func (c *Config) ValidateAgent() error {
@@ -54,21 +56,19 @@ func (c *Config) ValidateAgent() error {
 }
 
 func (c *Config) ValidateBlockHeightFeature() error {
-  if c.BlockHeightConfig.RpcURL == "" {
-    return fmt.Errorf("to use the block-height feature, rpc-url is required")
-  }
+
   return nil
 }
 func (c *Config) ValidateDiskSpaceFeature() error {
-  fmt.Println(c.DiskSpaceConfig.Paths)
   if len(c.DiskSpaceConfig.Paths) == 0 {
     return fmt.Errorf("to use the disk space feature, paths is required")
   }
   return nil
 }
-func (c *Config) ValidateVotingFeature() error {
-  if c.VotingConfig.WsURL == "" {
-    return fmt.Errorf("to use the voting feature, ws-url is required")
+func (c *Config) ValidateValidatorMassageFeature() error {
+
+  if c.ValidatorMassageConfig.AccAddress == "" {
+    return fmt.Errorf("to use the validator massage feature, acc_address is required")
   }
   return nil
 }
@@ -97,8 +97,8 @@ func LoadConfig(path string) (*Config, error) {
       return nil, fmt.Errorf("invalid config: %w", err)
     }
   }
-  if config.Feature.Voting {
-    if err := config.ValidateVotingFeature(); err != nil {
+  if config.Feature.ValidatorMassage {
+    if err := config.ValidateValidatorMassageFeature(); err != nil {
       return nil, fmt.Errorf("invalid config: %w", err)
     }
   }

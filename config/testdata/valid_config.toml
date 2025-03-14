@@ -2,23 +2,23 @@
 name = "cosmos-hub"
 data_send_interval = 5
 main_system_url = "http://localhost:8080"
+rpc_url = "http://localhost:11190"
 
 
 [feature]
 block_height = true
 disk_space = true
-voting = true
+validator_massage = true
 ibc_transfer = false
 
 [block-height]
-rpc_url = "http://localhost:11190"
 
 [disk-space]
 paths = ["/"]
 
 
-[voting]
-ws_url = "http://localhost:11157"
+[validator-massage]
+acc_address = "cosmosvalcons..."
 
 
 [main-system]

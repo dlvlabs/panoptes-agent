@@ -30,8 +30,8 @@ func (d *DiskMonitor) Start(ctx context.Context, schedule <-chan time.Time) erro
 
         for _, usage := range usages {
           log.Printf("Disk usage for %s:\n"+
-            "Space: %.2f%% (Used: %.2f GB, Free: %.2f GB, Total: %.2f GB)\n"+
-            "Inodes: %.2f%% (Used: %d, Free: %d, Total: %d)",
+            "\tSpace: %.2f%% (Used: %.2f GB, Free: %.2f GB, Total: %.2f GB)\n"+
+            "\tInodes: %.2f%% (Used: %d, Free: %d, Total: %d)",
             usage.Path,
             usage.UsagePercent,
             usage.UsedGB,

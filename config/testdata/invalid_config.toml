@@ -2,22 +2,23 @@
 name = ""
 data_send_interval = 10
 main_system_url = ""
+rpc_url = ""
 
 [feature]
 block_height = true
 disk_space = true
-voting = true
+validator_massage = true
 ibc_transfer = false
 
 [block-height]
-rpc_url = ""
+
 
 [disk-space]
 paths = ["/"]
 
 
-[voting]
-ws_url = ""
+[validator-massage]
+acc_address = ""
 
 
 [main-system]

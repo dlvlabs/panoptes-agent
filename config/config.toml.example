@@ -15,6 +15,10 @@ data_send_interval = 10
 # Example: https://api.monitoring-system.com
 main_system_url = ""
 
+# Node RPC endpoint - HTTP/HTTPS endpoint for node communication
+# Example: http://localhost:26657
+rpc_url = ""
+
 ###############################################################################
 #                             Feature Settings                                #
 ###############################################################################
@@ -28,11 +32,12 @@ block_height = false
 # Monitors disk usage and alerts 
 disk_space = false
 
-# Enable/disable voting monitoring
-# Tracks validator voting participation:
+# Enable/disable validator message monitoring
+# Tracks validator participation:
 # - Missed blocks
-# - Proposal participation
-voting = false
+# - Status
+# - Moniker
+validator_massage = false
 
 # Enable/disable IBC transfer monitoring
 # Monitors Inter-Blockchain Communication:
@@ -46,9 +51,7 @@ ibc_transfer = false
 ###############################################################################
 
 [block-height]
-# Node RPC endpoint - HTTP/HTTPS endpoint for node communication
-# Example: http://localhost:26657
-rpc_url = ""
+
 
 ###############################################################################
 #                           Disk Space Settings                               #
@@ -61,11 +64,9 @@ rpc_url = ""
 paths = []
 
 ###############################################################################
-#                            Voting Settings                                  #
+#                         Validator Massage Settings                          #
 ###############################################################################
 
-[voting]
-# Node WebSocket endpoint for subscriptions and real-time updates
-# Example: ws://localhost:26657/websocket
-ws_url = ""
+[validator-massage]
 
+acc_address = ""
