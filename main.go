@@ -3,26 +3,20 @@ package main
 import (
   "log"
   "os"
-  "os/signal"
-  "syscall"
 
-  "dlvlabs.net/panoptes-agent/config"
-  "dlvlabs.net/panoptes-agent/internal/agent"
+  "dlvlabs.net/panoptes-agent/cmd/app"
+  "dlvlabs.net/panoptes-agent/cmd/cli"
 )
 
 func main() {
-  cfg, err := config.LoadConfig("config/config.toml")
-  if err != nil {
-    log.Fatalf("Failed to load config: %v", err)
+  if len(os.Args) > 1 {
+    if err := cli.ExecuteCLI(); err != nil {
+      log.Fatal(err)
+    }
+    return
   }
 
-  monitor := agent.NewAgent(cfg)
-  if err := monitor.Start(); err != nil {
-    log.Fatalf("Failed to start monitoring: %v", err)
+  if err := app.Execute(); err != nil {
+    log.Fatal(err)
   }
-  defer monitor.Stop()
-
-  sigCh := make(chan os.Signal, 1)
-  signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
-  <-sigCh
 }

@@ -31,7 +31,6 @@ type DiskSpaceConfig struct {
 }
 
 type ValidatorMassageConfig struct {
-  // TODO: 삭제 후 일반 Address -> consAddress로 변환하는 기능 추가
   AccAddress string `toml:"acc_address"`
 }
 
