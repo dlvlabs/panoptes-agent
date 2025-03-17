@@ -1,9 +1,10 @@
-package cli
+package cmd
 
 import (
 	"fmt"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"syscall"
 
 	"dlvlabs.net/panoptes-agent/config"
@@ -22,7 +23,13 @@ func init() {
 }
 
 func runStart(cmd *cobra.Command, args []string) error {
-	cfg, err := config.LoadConfig("config/config.toml")
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return fmt.Errorf("failed to get home directory: %v", err)
+	}
+	configPath := filepath.Join(home, ".config/panoptes/config.toml")
+
+	cfg, err := config.LoadConfig(configPath)
 	if err != nil {
 		return fmt.Errorf("configuration file load failed: %v", err)
 	}

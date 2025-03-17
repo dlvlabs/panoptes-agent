@@ -10,6 +10,7 @@ func monitorSchedule(ctx context.Context, minutes int) <-chan time.Time {
     return nil
   }
 
+  // 이거 주입받으면 되는거 아님 ?
   ticker := time.NewTicker(time.Duration(minutes) * time.Minute)
   ch := make(chan time.Time, 1)
 
