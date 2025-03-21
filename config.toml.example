@@ -4,6 +4,7 @@
 
 [agent]
 # Node name for identification
+# Optional
 name = ""
 
 # Interval in minutes to send monitoring data
@@ -11,9 +12,10 @@ name = ""
 # - 10 for every 10 minutes
 data_send_interval = 10
 
+# Feature development is currently on hold
 # Main system API endpoint for reporting and control
 # Example: https://api.monitoring-system.com
-main_system_url = ""
+# main_system_url = ""
 
 # Node RPC endpoint - HTTP/HTTPS endpoint for node communication
 # Example: http://localhost:26657
@@ -38,13 +40,6 @@ disk_space = false
 # - Status
 # - Moniker
 validator_massage = false
-
-# Enable/disable IBC transfer monitoring
-# Monitors Inter-Blockchain Communication:
-# - Packet flow
-# - Channel status
-# - Transfer success/failure
-ibc_transfer = false
 
 ###############################################################################
 #                           Block Height Settings                              #

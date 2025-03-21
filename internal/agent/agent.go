@@ -9,7 +9,7 @@ import (
   "dlvlabs.net/panoptes-agent/internal/block"
   "dlvlabs.net/panoptes-agent/internal/disk"
   "dlvlabs.net/panoptes-agent/internal/validator"
-  "dlvlabs.net/panoptes-agent/utils/schedule"
+  "dlvlabs.net/panoptes-agent/utils/scheduler"
 )
 
 func NewAgent(cfg *config.Config) *Agent {
@@ -24,14 +24,17 @@ func NewAgent(cfg *config.Config) *Agent {
 
 func (a *Agent) Start() error {
   if a.cfg.Feature.BlockHeight {
-    blockSchedule := schedule.NewMonitorSchedule(a.ctx, a.minutes)
+    blockScheduler, err := scheduler.NewMonitorScheduler(a.ctx, a.minutes)
+    if err != nil {
+      return err
+    }
     rpcClient, err := rpc.NewRPCClient(&a.ctx, a.cfg.Agent.RpcURL)
     if err != nil {
       return err
     }
 
     a.blockMonitor = block.NewBlockMonitor(rpcClient)
-    if err := a.blockMonitor.Start(a.ctx, blockSchedule); err != nil {
+    if err := a.blockMonitor.Start(a.ctx, blockScheduler); err != nil {
       return err
     }
 
@@ -39,22 +42,28 @@ func (a *Agent) Start() error {
   }
 
   if a.cfg.Feature.DiskSpace {
-    diskSchedule := schedule.NewMonitorSchedule(a.ctx, a.minutes)
+    diskScheduler, err := scheduler.NewMonitorScheduler(a.ctx, a.minutes)
+    if err != nil {
+      return err
+    }
     a.diskMonitor = disk.NewDiskMonitor(a.cfg.DiskSpaceConfig.Paths)
-    if err := a.diskMonitor.Start(a.ctx, diskSchedule); err != nil {
+    if err := a.diskMonitor.Start(a.ctx, diskScheduler); err != nil {
       return err
     }
     log.Println("Disk space monitoring started")
   }
 
   if a.cfg.Feature.ValidatorMassage {
-    validatorSchedule := schedule.NewMonitorSchedule(a.ctx, a.minutes)
+    validatorScheduler, err := scheduler.NewMonitorScheduler(a.ctx, a.minutes)
+    if err != nil {
+      return err
+    }
     rpcClient, err := rpc.NewRPCClient(&a.ctx, a.cfg.Agent.RpcURL)
     if err != nil {
       return err
     }
     a.validator = validator.NewValidatorMonitor(rpcClient, a.cfg.ValidatorMassageConfig.AccAddress)
-    if err := a.validator.Start(a.ctx, validatorSchedule); err != nil {
+    if err := a.validator.Start(a.ctx, validatorScheduler); err != nil {
       return err
     }
     log.Println("Validator monitoring started")
@@ -71,5 +80,10 @@ func (a *Agent) Stop() {
   if a.diskMonitor != nil {
     a.diskMonitor.Stop()
   }
+
+  if a.validator != nil {
+    a.validator.Stop()
+  }
+
   a.cancel()
 }

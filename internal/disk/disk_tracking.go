@@ -5,6 +5,10 @@ import (
   "syscall"
 )
 
+func bytesToGB(bytes uint64) float64 {
+  return float64(bytes) / 1024 / 1024 / 1024
+}
+
 func (d *DiskMonitor) getDiskUsage(path string) (*diskUsage, error) {
   var stat syscall.Statfs_t
   err := syscall.Statfs(path, &stat)
