@@ -17,6 +17,7 @@ type Config struct {
 }
 
 type AgentConfig struct {
+  // * Optional
   Name             string `toml:"name"`
   DataSendInterval int    `toml:"data_send_interval"`
   // * Feature development is currently on hold
@@ -43,9 +44,6 @@ type FeatureConfig struct {
 }
 
 func (c *Config) ValidateAgent() error {
-  if c.Agent.Name == "" {
-    return fmt.Errorf("agent name is required")
-  }
 
   if c.Agent.DataSendInterval <= 0 {
     return fmt.Errorf("data send interval is more then 0")

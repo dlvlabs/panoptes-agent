@@ -4,6 +4,7 @@
 
 [agent]
 # Node name for identification
+# Optional
 name = ""
 
 # Interval in minutes to send monitoring data
@@ -39,13 +40,6 @@ disk_space = false
 # - Status
 # - Moniker
 validator_massage = false
-
-# Enable/disable IBC transfer monitoring
-# Monitors Inter-Blockchain Communication:
-# - Packet flow
-# - Channel status
-# - Transfer success/failure
-ibc_transfer = false
 
 ###############################################################################
 #                           Block Height Settings                              #
