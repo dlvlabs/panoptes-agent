@@ -1,7 +1,6 @@
 [agent]
 name = "cosmos-hub"
 data_send_interval = 5
-main_system_url = "http://localhost:8080"
 rpc_url = "http://localhost:11190"
 
 

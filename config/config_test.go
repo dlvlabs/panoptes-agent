@@ -21,7 +21,6 @@ func TestLoadConfig(t *testing.T) {
     assert.Equal(t, true, config.Feature.DiskSpace)
     assert.Equal(t, true, config.Feature.ValidatorMassage)
     assert.Equal(t, false, config.Feature.IBCTransfer)
-    assert.Equal(t, "http://localhost:8080", config.Agent.MainSystemUrl)
   })
 
   t.Run("load invalid config", func(t *testing.T) {
@@ -42,7 +41,6 @@ func TestValidateAgent(t *testing.T) {
     config := &Config{
       Agent: AgentConfig{
         Name:             "cosmos-hub",
-        MainSystemUrl:    "http://localhost:8080",
         DataSendInterval: 5,
       },
     }

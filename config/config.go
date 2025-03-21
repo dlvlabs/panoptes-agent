@@ -19,8 +19,9 @@ type Config struct {
 type AgentConfig struct {
   Name             string `toml:"name"`
   DataSendInterval int    `toml:"data_send_interval"`
-  MainSystemUrl    string `toml:"main_system_url"`
-  RpcURL           string `toml:"rpc_url"`
+  // * Feature development is currently on hold
+  // MainSystemUrl    string `toml:"main_system_url"`
+  RpcURL string `toml:"rpc_url"`
 }
 
 type BlockHeightConfig struct {
@@ -45,9 +46,7 @@ func (c *Config) ValidateAgent() error {
   if c.Agent.Name == "" {
     return fmt.Errorf("agent name is required")
   }
-  if c.Agent.MainSystemUrl == "" {
-    return fmt.Errorf("main system url is required")
-  }
+
   if c.Agent.DataSendInterval <= 0 {
     return fmt.Errorf("data send interval is more then 0")
   }

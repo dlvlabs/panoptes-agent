@@ -1,7 +1,6 @@
 [agent]
 name = ""
 data_send_interval = 10
-main_system_url = ""
 rpc_url = ""
 
 [feature]
