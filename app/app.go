@@ -10,7 +10,7 @@ import (
 )
 
 func Execute() error {
-  cfg, err := config.LoadConfig("config/config.toml")
+  cfg, err := config.LoadConfig("config.toml")
   if err != nil {
     return err
   }
