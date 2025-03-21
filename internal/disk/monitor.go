@@ -3,7 +3,8 @@ package disk
 import (
   "context"
   "log"
-  "time"
+
+  "dlvlabs.net/panoptes-agent/utils/scheduler"
 )
 
 func NewDiskMonitor(paths []string) *DiskMonitor {
@@ -13,15 +14,12 @@ func NewDiskMonitor(paths []string) *DiskMonitor {
   }
 }
 
-func bytesToGB(bytes uint64) float64 {
-  return float64(bytes) / 1024 / 1024 / 1024
-}
-
-func (d *DiskMonitor) Start(ctx context.Context, schedule <-chan time.Time) error {
+func (d *DiskMonitor) Start(ctx context.Context, schedule scheduler.Scheduler) error {
+  scheduleCh := schedule.Execute()
   go func() {
     for {
       select {
-      case <-schedule:
+      case <-scheduleCh:
         usages, err := d.monitorAll()
         if err != nil {
           log.Printf("Error monitoring disk usage: %v", err)

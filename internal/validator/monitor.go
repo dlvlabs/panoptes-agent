@@ -3,9 +3,9 @@ package validator
 import (
   "context"
   "log"
-  "time"
 
   "dlvlabs.net/panoptes-agent/infrastructure/client/rpc"
+  "dlvlabs.net/panoptes-agent/utils/scheduler"
 )
 
 func NewValidatorMonitor(client *rpc.RPCClient, accAddress string) *ValidatorMonitor {
@@ -28,11 +28,12 @@ func NewValidatorMonitor(client *rpc.RPCClient, accAddress string) *ValidatorMon
   }
 }
 
-func (v *ValidatorMonitor) Start(ctx context.Context, schedule <-chan time.Time) error {
+func (v *ValidatorMonitor) Start(ctx context.Context, schedule scheduler.Scheduler) error {
+  scheduleCh := schedule.Execute()
   go func() {
     for {
       select {
-      case <-schedule:
+      case <-scheduleCh:
         if err := v.GetValidatorMissedBlocks(ctx); err != nil {
           log.Printf("Error getting vote status: %v", err)
         }

@@ -3,9 +3,9 @@ package block
 import (
   "context"
   "log"
-  "time"
 
   "dlvlabs.net/panoptes-agent/infrastructure/client/rpc"
+  "dlvlabs.net/panoptes-agent/utils/scheduler"
 )
 
 func NewBlockMonitor(client *rpc.RPCClient) *BlockMonitor {
@@ -15,12 +15,13 @@ func NewBlockMonitor(client *rpc.RPCClient) *BlockMonitor {
   }
 }
 
-func (m *BlockMonitor) Start(ctx context.Context, schedule <-chan time.Time) error {
+func (m *BlockMonitor) Start(ctx context.Context, schedule scheduler.Scheduler) error {
+  scheduleCh := schedule.Execute()
   defer m.client.Close()
   go func() {
     for {
       select {
-      case <-schedule:
+      case <-scheduleCh:
         if err := getBlockHeight(m.client.GetClient(), ctx); err != nil {
           log.Printf("Error getting block height: %v", err)
         }
