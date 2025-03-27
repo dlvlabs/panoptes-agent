@@ -14,6 +14,7 @@ type Config struct {
   BlockHeightConfig      BlockHeightConfig      `toml:"block-height"`
   DiskSpaceConfig        DiskSpaceConfig        `toml:"disk-space"`
   ValidatorMassageConfig ValidatorMassageConfig `toml:"validator-massage"`
+  NotificationConfig     NotificationConfig     `toml:"notification"`
 }
 
 type AgentConfig struct {
@@ -42,6 +43,14 @@ type FeatureConfig struct {
   ValidatorMassage bool `toml:"validator_massage"`
   IBCTransfer      bool `toml:"ibc_transfer"`
 }
+type NotificationConfig struct {
+  Telegram       bool           `toml:"telegram"`
+  TelegramConfig TelegramConfig `toml:"telegram_setting"`
+}
+type TelegramConfig struct {
+  Token  string `toml:"token"`
+  ChatID string `toml:"chat_id"`
+}
 
 func (c *Config) ValidateAgent() error {
 
@@ -65,6 +74,16 @@ func (c *Config) ValidateValidatorMassageFeature() error {
 
   if c.ValidatorMassageConfig.AccAddress == "" {
     return fmt.Errorf("to use the validator massage feature, acc_address is required")
+  }
+  return nil
+}
+
+func (c *Config) ValidateNotification() error {
+  if c.NotificationConfig.TelegramConfig.Token == "" {
+    return fmt.Errorf("to use the telegram notification feature, token is required")
+  }
+  if c.NotificationConfig.TelegramConfig.ChatID == "" {
+    return fmt.Errorf("to use the telegram notification feature, chat_id is required")
   }
   return nil
 }
@@ -95,6 +114,11 @@ func LoadConfig(path string) (*Config, error) {
   }
   if config.Feature.ValidatorMassage {
     if err := config.ValidateValidatorMassageFeature(); err != nil {
+      return nil, fmt.Errorf("invalid config: %w", err)
+    }
+  }
+  if config.NotificationConfig.Telegram {
+    if err := config.ValidateNotification(); err != nil {
       return nil, fmt.Errorf("invalid config: %w", err)
     }
   }
