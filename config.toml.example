@@ -22,6 +22,21 @@ data_send_interval = 10
 rpc_url = ""
 
 ###############################################################################
+#                         Notification Configuration                          #
+###############################################################################
+
+[notification]
+# Enable/disable Telegram notifications
+telegram = true
+
+# Telegram bot token
+telegram_token = ""
+
+# Telegram chat ID
+telegram_chat_id = ""
+
+
+###############################################################################
 #                             Feature Settings                                #
 ###############################################################################
 
