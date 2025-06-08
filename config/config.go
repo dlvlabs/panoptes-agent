@@ -44,10 +44,11 @@ type FeatureConfig struct {
   IBCTransfer      bool `toml:"ibc_transfer"`
 }
 type NotificationConfig struct {
-  Telegram       bool           `toml:"telegram"`
+  Enabled bool `toml:"enabled"`
   TelegramConfig TelegramConfig `toml:"telegram_setting"`
 }
 type TelegramConfig struct {
+  Enabled bool   `toml:"enabled"`
   Token  string `toml:"token"`
   ChatID string `toml:"chat_id"`
 }
@@ -79,11 +80,13 @@ func (c *Config) ValidateValidatorMassageFeature() error {
 }
 
 func (c *Config) ValidateNotification() error {
-  if c.NotificationConfig.TelegramConfig.Token == "" {
-    return fmt.Errorf("to use the telegram notification feature, token is required")
-  }
-  if c.NotificationConfig.TelegramConfig.ChatID == "" {
-    return fmt.Errorf("to use the telegram notification feature, chat_id is required")
+  if c.NotificationConfig.TelegramConfig.Enabled {
+    if c.NotificationConfig.TelegramConfig.Token == "" {
+      return fmt.Errorf("to use the telegram notification feature, token is required")
+    }
+    if c.NotificationConfig.TelegramConfig.ChatID == "" {
+      return fmt.Errorf("to use the telegram notification feature, chat_id is required")
+    }
   }
   return nil
 }
@@ -117,7 +120,7 @@ func LoadConfig(path string) (*Config, error) {
       return nil, fmt.Errorf("invalid config: %w", err)
     }
   }
-  if config.NotificationConfig.Telegram {
+  if config.NotificationConfig.Enabled {
     if err := config.ValidateNotification(); err != nil {
       return nil, fmt.Errorf("invalid config: %w", err)
     }

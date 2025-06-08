@@ -26,10 +26,13 @@ rpc_url = ""
 ###############################################################################
 
 [notification]
-# Enable/disable Telegram notifications
-telegram = true
+# Enable/disable notification
+enabled = false
 
 [notification.telegram]
+# Enable/disable Telegram notifications
+enabled = false
+
 # Telegram bot token
 telegram_token = ""
 
